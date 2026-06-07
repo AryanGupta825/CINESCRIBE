@@ -1,25 +1,27 @@
 import os
 import threading
 import uuid
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
-from utils.audio_processor import process_input
-from core.transcriber import transcribe_all
-from core.summarizer import summarize, generate_title
-from core.extractor import extract_action_items, extract_key_decisions, extract_questions
-from core.rag_engine import build_rag_chain, ask_question
 
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "cinescribe-secret-2024")
 
-# In-memory job store: job_id -> { status, steps, result, rag_chain, error }
+# In-memory job store
 jobs = {}
 jobs_lock = threading.Lock()
 
 
 def run_pipeline(job_id: str, source: str, language: str):
+    # Lazy imports — loaded only when pipeline runs, not at startup
+    from utils.audio_processor import process_input
+    from core.transcriber import transcribe_all
+    from core.summarizer import summarize, generate_title
+    from core.extractor import extract_action_items, extract_key_decisions, extract_questions
+    from core.rag_engine import build_rag_chain, ask_question
+
     def update(step, state):
         with jobs_lock:
             jobs[job_id]["steps"][step] = state
@@ -127,6 +129,7 @@ def status(job_id):
 
 @app.route("/api/chat", methods=["POST"])
 def chat():
+    from core.rag_engine import ask_question
     data = request.get_json()
     job_id = data.get("job_id")
     question = (data.get("question") or "").strip()
