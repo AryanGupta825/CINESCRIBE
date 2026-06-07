@@ -4,6 +4,7 @@
 # ── Flask Web Framework ───────────────────────────────────────────────────────
 flask>=3.0.0                      # Web framework (replaces Streamlit)
 flask-cors>=4.0.0                 # Cross-origin requests support
+gunicorn>=22.0.0                  # Production WSGI server for Render
 
 # ── Audio / Video acquisition ─────────────────────────────────────────────────
 yt-dlp>=2024.4.9                  # Download audio from YouTube URLs
