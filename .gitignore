@@ -1,6 +1,8 @@
-echo "venv/" > .gitignore
-echo ".env" >> .gitignore
-echo "__pycache__/" >> .gitignore
-echo "*.pyc" >> .gitignore
-echo "vector_db/" >> .gitignore
-echo "downloades/" >> .gitignore
+venv/
+.env
+__pycache__/
+*.pyc
+vector_db/
+downloades/
+*.egg-info/
+.DS_Store
