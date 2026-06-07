@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: cinescribe
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --timeout 300 --workers 1
+    envVars:
+      - key: MISTRAL_API_KEY
+        sync: false
+      - key: SARVAM_API_KEY
+        sync: false
+      - key: WHISPER_MODEL
+        value: tiny
+      - key: FLASK_SECRET_KEY
+        generateValue: true
