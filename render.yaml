@@ -3,7 +3,7 @@ services:
     name: cinescribe
     runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --timeout 300 --workers 1
+    startCommand: gunicorn app:app --bind 0.0.0.0:10000 --timeout 300 --workers 1
     envVars:
       - key: MISTRAL_API_KEY
         sync: false
@@ -15,3 +15,5 @@ services:
         generateValue: true
       - key: PYTHON_VERSION
         value: 3.11.9
+      - key: PORT
+        value: 10000
