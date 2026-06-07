@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CineScribe — AI Video Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+  <!-- ── Sidebar ───────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="3"/>
+          <path d="M7 2v20M17 2v20M2 12h20M2 7h5M17 7h5M2 17h5M17 17h5"/>
+        </svg>
+      </div>
+      <div>
+        <div class="logo-name">CineScribe</div>
+        <div class="logo-tagline">Video Intelligence</div>
+      </div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <form class="input-form" id="inputForm">
+      <label class="field-label">Source</label>
+      <input
+        type="text"
+        id="sourceInput"
+        class="text-input"
+        placeholder="YouTube URL or /path/to/file.mp4"
+        autocomplete="off"
+      />
+
+      <label class="field-label" style="margin-top:1rem">Language</label>
+      <div class="select-wrapper">
+        <select id="languageSelect" class="select-input">
+          <option value="english">English (Whisper)</option>
+          <option value="hinglish">Hinglish (Sarvam AI)</option>
+        </select>
+        <svg class="select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      <button type="submit" class="btn-primary" id="analyseBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Analyse
+      </button>
+    </form>
+
+    <div class="sidebar-divider"></div>
+
+    <!-- Pipeline status -->
+    <div id="pipelinePanel" class="pipeline-panel hidden">
+      <div class="pipeline-label">Pipeline</div>
+      <div class="step-list" id="stepList">
+        <div class="step-item" data-step="audio">
+          <div class="step-dot" data-step="audio"></div>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+          Audio Processing
+        </div>
+        <div class="step-item" data-step="transcript">
+          <div class="step-dot" data-step="transcript"></div>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          Transcription
+        </div>
+        <div class="step-item" data-step="title">
+          <div class="step-dot" data-step="title"></div>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          Title Generation
+        </div>
+        <div class="step-item" data-step="summary">
+          <div class="step-dot" data-step="summary"></div>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="21" y1="18" x2="13" y2="18"/></svg>
+          Summarisation
+        </div>
+        <div class="step-item" data-step="extract">
+          <div class="step-dot" data-step="extract"></div>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Extraction
+        </div>
+        <div class="step-item" data-step="rag">
+          <div class="step-dot" data-step="rag"></div>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          RAG Engine
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main ──────────────────────────────────────────────── -->
+  <main class="main">
+
+    <!-- Hero (empty state) -->
+    <section class="hero" id="heroSection">
+      <div class="hero-eyebrow">
+        <span class="badge badge-blue">Transcription</span>
+        <span class="badge badge-teal">Summarisation</span>
+        <span class="badge badge-green">RAG Chat</span>
+      </div>
+      <h1 class="hero-title">CineScribe</h1>
+      <p class="hero-sub">Transcribe · Summarise · Chat with your videos &amp; meetings</p>
+      <p class="hero-desc">
+        Paste a YouTube URL or local file path in the sidebar, choose your language, and hit <strong>Analyse</strong>.
+      </p>
+      <div class="hero-grid">
+        <div class="hero-feat">
+          <div class="feat-icon feat-icon--blue">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+          </div>
+          <div class="feat-text">
+            <div class="feat-title">Multi-Engine STT</div>
+            <div class="feat-desc">Whisper for English, Sarvam AI for Hinglish code-mixed audio</div>
+          </div>
+        </div>
+        <div class="hero-feat">
+          <div class="feat-icon feat-icon--teal">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          </div>
+          <div class="feat-text">
+            <div class="feat-title">RAG-Powered Chat</div>
+            <div class="feat-desc">Ask granular questions; answers grounded in your transcript</div>
+          </div>
+        </div>
+        <div class="hero-feat">
+          <div class="feat-icon feat-icon--green">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <div class="feat-text">
+            <div class="feat-title">Smart Extraction</div>
+            <div class="feat-desc">Action items, key decisions, and open questions — automatically</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results (hidden until done) -->
+    <section class="results hidden" id="resultsSection">
+
+      <!-- Title card -->
+      <div class="result-card title-card" id="cardTitle">
+        <div class="card-label">Session Title</div>
+        <div class="session-title" id="sessionTitle">—</div>
+      </div>
+
+      <!-- Row 1: Summary + Transcript -->
+      <div class="result-row row-asymmetric">
+        <div class="result-card flex-grow" id="cardSummary">
+          <div class="card-label">Summary</div>
+          <div class="card-body" id="summaryContent">—</div>
+        </div>
+        <div class="result-card transcript-card" id="cardTranscript">
+          <div class="card-label">
+            Full Transcript
+            <button class="toggle-btn" id="transcriptToggle">Show</button>
+          </div>
+          <div class="transcript-box hidden" id="transcriptContent">—</div>
+        </div>
+      </div>
+
+      <!-- Row 2: Action Items | Decisions | Questions -->
+      <div class="result-row row-three">
+        <div class="result-card" id="cardActions">
+          <div class="card-label">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            Action Items
+          </div>
+          <div class="card-body" id="actionContent">—</div>
+        </div>
+        <div class="result-card" id="cardDecisions">
+          <div class="card-label">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+            Key Decisions
+          </div>
+          <div class="card-body" id="decisionsContent">—</div>
+        </div>
+        <div class="result-card" id="cardQuestions">
+          <div class="card-label">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Open Questions
+          </div>
+          <div class="card-body" id="questionsContent">—</div>
+        </div>
+      </div>
+
+      <!-- Chat -->
+      <div class="result-card chat-card" id="cardChat">
+        <div class="card-label">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Chat with your Meeting
+        </div>
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-empty">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <p>Ask anything about your meeting transcript</p>
+          </div>
+        </div>
+        <div class="chat-input-row">
+          <input
+            type="text"
+            id="chatInput"
+            class="text-input chat-text-input"
+            placeholder="What were the main decisions made?"
+          />
+          <button class="btn-send" id="sendBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+        <div class="chat-actions" id="chatActionsBar" style="display:none">
+          <button class="btn-ghost" id="clearChatBtn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+            Clear Chat
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Toast -->
+    <div class="toast hidden" id="toast"></div>
+
+  </main>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
